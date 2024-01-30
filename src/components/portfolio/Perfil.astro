@@ -1,0 +1,52 @@
+---
+interface Props {
+  whatsapp: string;
+  imagen: string;
+  nombre: string;
+  titulo: string;
+  presentacion: string;
+  direccion: string;
+  nacimiento: string;
+  mail: string;
+}
+const { 
+  whatsapp,
+  imagen,
+  nombre,
+  titulo,
+  presentacion,
+  direccion,
+  nacimiento,
+  mail
+} = Astro.props;
+---
+<!-- Perfil -->
+<div class="container py-3">
+    <div class="row">
+      <div class="col-md-6">
+        <div class="img-place wow zoomIn">
+          <img src={imagen} alt="Photo Profile">
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="caption wow fadeInRight">
+          <h2 class="fg-dark">{nombre}</h2>
+          <p class="fg-theme fw-medium">{titulo}</p>
+          <p>{presentacion}</p>
+          <ul class="theme-list">
+            <li class="fg-dark"><b>De:</b> {direccion}</li>
+            <li class="fg-dark"><b>Nacimiento:</b> {nacimiento}</li>
+            { whatsapp && 
+              <li class="fg-dark"><b>Whatsapp:</b> {whatsapp}</li>
+            }
+            { mail &&
+              <li class="fg-dark"><b>E-mail:</b> {mail}</li>
+            }
+          </ul>
+          { whatsapp && 
+            <a rel="nofollow noopener noreferrer" href={`https://wa.me/54${whatsapp}`} target="_blank" class="btn btn-theme btn-whatsapp btn-rounded">Enviar WhatsApp</a>
+          }
+        </div>
+      </div>
+    </div>
+  </div> <!-- End Perfil -->

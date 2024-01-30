@@ -1,0 +1,17 @@
+---
+interface Props {
+	nombre: string;
+  titulo: string;
+}
+
+const { nombre,titulo } = Astro.props;
+---
+<div class="vg-page page-home" id="inicio" style="background-image: url(../recursos/img/bg_image_2.jpg);">
+  <div class="caption wow zoomInUp">
+    <h1 class="fw-medium fg-theme">{nombre}</h1>
+    <p class="tagline">{titulo}</p>
+    <!-- <?php if(!$row['activo'] && isset($_SESSION['admin_id'])){ ?>
+      <h3 class="fw-medium fg-theme">El perfil está oculto: Solo vos podés ver esto</h3>
+    <?php } ?> -->
+  </div>
+</div>

@@ -1,0 +1,196 @@
+---
+import Minibar from '../../components/portfolio/Minibar.vue';
+import Inicio from '../../components/portfolio/Inicio.astro';
+import Perfil from '../../components/portfolio/Perfil.astro';
+import Conocimientos from '../../components/portfolio/Conocimientos.vue';
+import Experiencia from '../../components/portfolio/Experiencia.vue';
+import Servicios from '../../components/portfolio/Servicios.vue';
+import Portfolio from '../../components/portfolio/Portfolio.vue';
+import Contacto from '../../components/portfolio/Contacto.astro';
+import Footer from '../../components/portfolio/Footer.astro';
+import Actualizando from '../../components/portfolio/Actualizando.astro';
+
+interface Props {
+  id: number;
+  nombre: string;
+  color: string;
+  colorDark: string;
+  colorDarken: string;
+  titulo: string;
+  slug: string;
+  activo: boolean;
+  imagen: string;
+  presentacion: string;
+  direccion: string;
+  nacimiento: string;
+  mail: string;
+  conocimientos: object;
+  conocimientos_p: object;
+  educacion_a: object;
+  educacion_i: object;
+  educacion_t: object;
+  educacion_d: object;
+  experiencia_a: object;
+  experiencia_t: object;
+  experiencia_s: object;
+  experiencia_d: object;
+  whatsapp: string;
+}
+import type { GetStaticPaths } from "astro";
+
+import Layout from '../../layouts/Portfolio.astro';
+
+export const getStaticPaths = (async() => {
+    const response = await fetch(
+        "https://manejoweb.com.ar/api.php?get_equipo=1"
+      );
+      
+    const usuarios = await response.json();
+
+    return usuarios.map((usuario) => {
+      return {
+        params: { slug: usuario.slug },
+        props: { 
+          id: usuario.id,
+          nombre: usuario.nombre,
+          color: usuario.color,
+          colorDark: usuario.dark,
+          colorDarken: usuario.darken,
+          whatsapp: usuario.whatsapp,
+          titulo: usuario.titulo,
+          activo: usuario.activo,
+          imagen: usuario.imagen,
+          presentacion: usuario.presentacion,
+          direccion: usuario.direccion,
+          nacimiento: usuario.nacimiento,
+          mail: usuario.mail,
+          conocimientos: usuario.conocimiento,
+          conocimientos_p: usuario.conocimiento_p,
+          educacion_a: usuario.educacion_a,
+          educacion_i: usuario.educacion_i,
+          educacion_t: usuario.educacion_t,
+          educacion_d: usuario.educacion_d,
+          experiencia_a: usuario.experiencia_a,
+          experiencia_t: usuario.experiencia_t,
+          experiencia_s: usuario.experiencia_s,
+          experiencia_d: usuario.experiencia_d,
+        },
+      };
+    });
+    
+}) satisfies GetStaticPaths;
+
+const { slug } = Astro.params
+const { 
+  id,
+  nombre,
+  color,
+  colorDark,
+  colorDarken,
+  titulo,
+  activo,
+  conocimientos,
+  conocimientos_p,
+  educacion_a,
+  educacion_i,
+  educacion_t,
+  educacion_d,
+  experiencia_a,
+  experiencia_t,
+  experiencia_s,
+  experiencia_d,
+  whatsapp,
+  imagen,
+  presentacion,
+  direccion,
+  nacimiento,
+  mail
+} = Astro.props
+const fetchCat = await fetch(`https://manejoweb.com.ar/api.php?get_categorias=${id}`);
+const categorias = await fetchCat.json();
+const fetchPortfolio = await fetch(`https://manejoweb.com.ar/api.php?get_portfolio=${id}`);
+const portfolio = await fetchPortfolio.json();
+const fetchServices = await fetch(`https://manejoweb.com.ar/api.php?get_servicios=${id}`);
+const servicios = await fetchServices.json();
+---
+
+<Layout 
+  nombre={nombre}
+  titulo={titulo}
+  slug={slug}
+  color={color}
+>
+ <!-- Back to top button -->
+ <div class="btn-back_to_top">
+    <i class="fas fa-chevron-up"></i>
+  </div>
+  
+  <div class="topbar-nav fixed-top">
+    <div class="brand">
+      <img src="../assets/images/faviconx64.png" alt="" width="30" height="30">
+    </div>
+    <h3 class="ml-1">Menú</h3>
+    <button class="btn-fab toggle-menu mr-3"><i class="fas fa-bars"></i></button>
+  </div>
+  { activo && 
+    <Minibar client:only
+      whatsapp={whatsapp}
+    />
+  }
+  <div class="vg-main-wrapper">
+  { activo && 
+      <Inicio 
+        nombre={nombre}
+        titulo={titulo}
+      />
+      <!-- Page Perfil -->
+      <div class="vg-page page-about" id="perfil">
+        <Perfil 
+          whatsapp={whatsapp}
+          imagen={imagen}
+          nombre={nombre}
+          titulo={titulo}
+          presentacion={presentacion}
+          direccion={direccion}
+          nacimiento={nacimiento}
+          mail={mail}
+        />
+        <Conocimientos 
+          conocimientos={conocimientos}
+          conocimientos_p={conocimientos_p}
+        />
+        <Experiencia 
+          educacion_a={educacion_a}
+          educacion_i={educacion_i}
+          educacion_t={educacion_t}
+          educacion_d={educacion_d}
+          experiencia_a={experiencia_a}
+          experiencia_t={experiencia_t}
+          experiencia_s={experiencia_s}
+          experiencia_d={experiencia_d}
+        />
+      </div> <!-- End page Perfil -->
+      { servicios &&
+        <Servicios
+          colorDark={colorDark}
+          colorDarken={colorDarken}
+          servicios={servicios}
+        />
+      }
+      <Portfolio 
+        categorias={categorias}
+        portfolio={portfolio}
+        client:only
+      />
+      <Contacto 
+        colorDarken={colorDarken}
+      />
+  }
+  { !activo && 
+	  <Actualizando />
+  }
+	<Footer 
+    colorDark={colorDark}
+  />
+  </div> <!-- End main wrapper -->
+</Layout>
