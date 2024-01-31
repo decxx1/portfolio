@@ -14,13 +14,13 @@
 
       </div>
 
-      <div class="gridder my-3" :id="galleryID">
+      <div class="gridder my-3 pswp-gallery pswp-gallery--single-column" id="galleryID">
         <template v-if="portfolio">
           <template v-for="value in portfolio">
-            <div v-if="currentCategory === '*' || currentCategory === value.categoria" :class="`grid-item ${value.categoria} wow zoomIn`" :key="value.id">
-              <div class="img-place gallery-item" :data-src="value.imagen" >
-                <img :src="value.mini" :alt="value.titulo">
-              </div>
+            <div v-if="currentCategory === '*' || currentCategory === value.categoria" :class="`grid-item ${value.categoria}`" :key="value.id">
+              <a class="img-place gallery-item" :href="value.imagen" :data-pswp-width="getWidth(value.imagen)" :data-pswp-height="getHeight(value.imagen)" >
+                <img loading="lazy" :src="value.mini" :alt="value.titulo">
+              </a>
               <div class="img-caption portfolio-caption">
                 <h5 class="text-white">{{ value.titulo }}</h5>
                 <p>{{ value.descripcion }}</p>
@@ -39,7 +39,6 @@ import PhotoSwipeLightbox from 'photoswipe/lightbox';
 import 'photoswipe/style.css';
 
 export default {
-    name: 'SimpleGallery',
     props:{
       categorias:{
         type: Object,
@@ -49,24 +48,42 @@ export default {
         type: Object,
         required: true
       },
-      galleryID: {
-        type: String,
-      },
     },
     data: () => ({
       currentCategory: '*',
+      lightbox: null,
     }),
     methods: {
       setCategory(categoria){
-        this.currentCategory = categoria
+        this.currentCategory = categoria;
+      },
+      getWidth(imageUrl) {
+        const img = new Image();
+        img.src = imageUrl;
+        return img.naturalWidth;
+      },
+      getHeight(imageUrl) {
+        const img = new Image();
+        img.src = imageUrl;
+        return img.naturalHeight;
       },
     },
     mounted() {
       if (!this.lightbox) {
         this.lightbox = new PhotoSwipeLightbox({
-          gallery: '#' + this.$props.galleryID,
+          gallery: '#galleryID',
           children: 'a',
-          pswpModule: () => import('photoswipe'),
+          mouseMovePan: true,
+          showHideAnimationType: 'zoom',
+          initialZoomLevel: 'fit',
+          secondaryZoomLevel: 1.5,
+          maxZoomLevel: 1,
+
+          imageClickAction: 'close',
+          tapAction: 'close',
+
+          pswpModule: () => import('photoswipe')
+          
         });
         this.lightbox.init();
       }
