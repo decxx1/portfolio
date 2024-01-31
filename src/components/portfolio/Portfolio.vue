@@ -13,12 +13,11 @@
         </template>
 
       </div>
-
-      <div class="gridder my-3 pswp-gallery pswp-gallery--single-column" id="galleryID">
-        <template v-if="portfolio">
+      <template v-if="portfolio">
+        <div class="gridder my-3" id="galleryID">
           <template v-for="value in portfolio">
-            <div v-if="currentCategory === '*' || currentCategory === value.categoria" :class="`grid-item ${value.categoria}`" :key="value.id">
-              <a class="img-place gallery-item" :href="value.imagen" :data-pswp-width="getWidth(value.imagen)" :data-pswp-height="getHeight(value.imagen)" >
+            <div v-if="currentCategory === '*' || currentCategory === value.categoria" class="grid-item" :key="value.id">
+              <a class="img-place" :href="value.imagen" :data-pswp-width="getWidth(value.imagen)" :data-pswp-height="getHeight(value.imagen)" >
                 <img loading="lazy" :src="value.mini" :alt="value.titulo">
               </a>
               <div class="img-caption portfolio-caption">
@@ -27,8 +26,8 @@
               </div>
             </div>
           </template>
-        </template>
-      </div> <!-- End gridder -->
+        </div> <!-- End gridder -->
+      </template>
 
     </div>
   </div> <!-- End Portfolio page -->
@@ -37,7 +36,6 @@
 <script>
 import PhotoSwipeLightbox from 'photoswipe/lightbox';
 import 'photoswipe/style.css';
-
 export default {
     props:{
       categorias:{
@@ -53,6 +51,9 @@ export default {
       currentCategory: '*',
       lightbox: null,
     }),
+    created() {
+      //console.log(this.portfolio)
+    },
     methods: {
       setCategory(categoria){
         this.currentCategory = categoria;
@@ -69,6 +70,7 @@ export default {
       },
     },
     mounted() {
+     
       if (!this.lightbox) {
         this.lightbox = new PhotoSwipeLightbox({
           gallery: '#galleryID',
@@ -85,6 +87,7 @@ export default {
           pswpModule: () => import('photoswipe')
           
         });
+
         this.lightbox.init();
       }
     },
@@ -103,4 +106,6 @@ export default {
   border-bottom-right-radius: 10px;
   background-color: var(--theme-red) !important;
 }
+
+
 </style>

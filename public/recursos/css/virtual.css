@@ -1060,6 +1060,7 @@ a:hover, a:active {
 .grid-item img {
     width: 100%;
     height: 100%;
+    object-fit: contain !important;
 }
 
 .grid-item .img-place {
@@ -1067,10 +1068,11 @@ a:hover, a:active {
     margin: 0 auto;
     width: 100%;
     max-width: 350px;
-    height: 100%;
+    /* height: 100%; */
     border-radius: 4px;
     overflow: hidden;
     cursor: pointer;
+    height: 236px !important;
 }
 
 .grid-item .img-caption {
