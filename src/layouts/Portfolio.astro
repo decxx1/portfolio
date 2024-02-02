@@ -12,75 +12,55 @@ const {
 	slug,
 	color,
 } = Astro.props;
-
+import '@/styles/virtual.css'
+import '@/styles/minibar.virtual.css'
+import '@/styles/animate.css'
 ---
 <!DOCTYPE html>
 <html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>{nombre} - Portfolio - ManejoWeb</title>
-  <link  rel="icon"   href="../assets/images/faviconx64.png" type="image/png" />
-	<link rel="canonical" href=`https://manejoweb.com.ar/${slug}` />
-	<meta name="title" content=`${nombre} - ${titulo} en ManejoWeb` />
-	<meta name="description" content=`Bienvenido al portfolio de ${nombre}, ${titulo} en ManejoWeb. Aquí encontrarás una selección de sus trabajos más destacados en marketing digital.`/>
-	<meta http-equiv="Cache-Control" content="no-cache" />
-	<meta http-equiv="Expires" content="Mon, 01 Jul 1970 00:00:00 GMT" />
-	<meta name="robots" content="index, follow" />
-	<meta name="googlebot" content="index, follow" />
-	 <!-- FACEBOOK OPEN GRAPH TAGS -->
-	<meta property="og:title" content=`${nombre} - ${titulo} en ManejoWeb` />
-	<meta property="og:description" content=`Bienvenido al portfolio de ${nombre}, ${titulo} en ManejoWeb. Aquí encontrarás una selección de sus trabajos más destacados en marketing digital.` />
-	<meta property="og:type" content="website" />
-	<meta property="og:url" content=`https://manejoweb.com.ar/${slug}` />
-	<meta property="og:image" content="https://manejoweb.com.ar/assets/images/portfolio.jpg" />
-	<!-- Twitter -->
-	<meta name="twitter:card" content="summary" />
-	<meta name="twitter:site" content="@" />
-	<meta name="twitter:title" content=`${nombre} - ${titulo} en ManejoWeb` />
-	<meta name="twitter:description" content=`Bienvenido al portfolio de ${nombre}, ${titulo} en ManejoWeb. Aquí encontrarás una selección de sus trabajos más destacados en marketing digital.` />
-	<meta name="twitter:url" content=`https://manejoweb.com.ar/${slug}` />
-	<meta name="twitter:image" content="https://manejoweb.com.ar/assets/images/portfolio.jpg" />
-    <link rel="preload stylesheet" type="text/css" href="../recursos/css/bootstrap.css">
-    <link rel="stylesheet" type="text/css" href="../recursos/vendor/animate/animate.css">
-    <link rel="stylesheet" type="text/css" href="../recursos/vendor/owl-carousel/owl.carousel.css">
-    <!-- <link rel="stylesheet" type="text/css" href="../recursos/vendor/perfect-scrollbar/css/perfect-scrollbar.css"> -->
-    <link rel="stylesheet" type="text/css" href="../recursos/vendor/nice-select/css/nice-select.css">
-    <link rel="stylesheet" type="text/css" href="../recursos/vendor/fancybox/css/jquery.fancybox.min.css">
-    <link rel="preload stylesheet" type="text/css" href="../recursos/css/virtual.css">
-    <link rel="stylesheet" type="text/css" href="../recursos/css/minibar.virtual.css">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>{nombre} - Portfolio - ManejoWeb</title>
+    <link  rel="icon"   href="../assets/images/faviconx64.png" type="image/png" />
+    <!-- Styles -->
+    <link rel="stylesheet" type="text/css" href="../recursos/css/bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../assets/css/all.min.css"/>
+    <link rel="canonical" href=`https://manejoweb.com.ar/${slug}` />
+    <meta name="title" content=`${nombre} - ${titulo} en ManejoWeb` />
+    <meta name="description" content=`Bienvenido al portfolio de ${nombre}, ${titulo} en ManejoWeb. Aquí encontrarás una selección de sus trabajos más destacados en marketing digital.`/>
+    <meta http-equiv="Cache-Control" content="no-cache" />
+    <meta http-equiv="Expires" content="Mon, 01 Jul 1970 00:00:00 GMT" />
+    <meta name="robots" content="index, follow" />
+    <meta name="googlebot" content="index, follow" />
+    <!-- FACEBOOK OPEN GRAPH TAGS -->
+    <meta property="og:title" content=`${nombre} - ${titulo} en ManejoWeb` />
+    <meta property="og:description" content=`Bienvenido al portfolio de ${nombre}, ${titulo} en ManejoWeb. Aquí encontrarás una selección de sus trabajos más destacados en marketing digital.` />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content=`https://manejoweb.com.ar/${slug}` />
+    <meta property="og:image" content="https://manejoweb.com.ar/assets/images/portfolio.jpg" />
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@" />
+    <meta name="twitter:title" content=`${nombre} - ${titulo} en ManejoWeb` />
+    <meta name="twitter:description" content=`Bienvenido al portfolio de ${nombre}, ${titulo} en ManejoWeb. Aquí encontrarás una selección de sus trabajos más destacados en marketing digital.` />
+    <meta name="twitter:url" content=`https://manejoweb.com.ar/${slug}` />
+    <meta name="twitter:image" content="https://manejoweb.com.ar/assets/images/portfolio.jpg" />
     <!-- recaptcha v3 -->
     <script defer="defer" src="https://www.google.com/recaptcha/api.js?render=6Le7RCgcAAAAADiRK_NZ3EtONMmj7UqKbq0S3w26"></script>
+  </head>
 
-</head>
-
-<body class="theme-red">
-    <slot />
-
-    
-    <!-- <script src="../recursos/js/bootstrap.bundle.min.js" is:inline></script> -->
-    <!-- <script src="../recursos/vendor/owl-carousel/owl.carousel.min.js" defer="defer" is:inline></script> -->
-    <!-- <script src="../recursos/vendor/perfect-scrollbar/js/perfect-scrollbar.js" is:inline></script> -->
-    <script src="../recursos/vendor/isotope/isotope.pkgd.min.js" defer="defer" is:inline></script>
-    <!-- <script src="../recursos/vendor/nice-select/js/jquery.nice-select.min.js" is:inline></script> -->
-    <!-- <script src="../recursos/vendor/fancybox/js/jquery.fancybox.min.js" is:inline></script> -->
-    <!-- <script src="../recursos/vendor/animateNumber/jquery.animateNumber.min.js" defer="defer" is:inline></script> -->
-    <!-- <script src="../recursos/vendor/waypoints/jquery.waypoints.min.js" is:inline></script> -->
-    <!-- <script src="../recursos/js/google-maps.js" defer="defer" is:inline></script> -->
-    <!-- <script src="../recursos/js/minibar-virtual.js" is:inline></script> -->
-    <!--Alertas-->
-    <script src="../assets/js/alertas.js" defer="defer" is:inline></script>
-    <div id="pageMessages"></div>
-</body>
+  <body class="theme-red">
+      <slot />
+  </body>
 </html>
 <script>
-import WOW from 'wow.js';
-new WOW().init();
+  import WOW from 'wow.js';
+  new WOW().init();
 </script>
 <style is:global define:vars={{ color: color }}>
-:root {
-    --theme-red: var(--color);
-}
+  :root {
+      --theme-red: var(--color);
+  }
 </style>

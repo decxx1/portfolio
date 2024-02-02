@@ -1,11 +1,18 @@
 <template>
-  <div class="minibar">
+  <div class="topbar-nav fixed-top">
+    <div class="brand">
+      <img src="../../images/faviconx64.png" alt="" width="30" height="30">
+    </div>
+    <h3 class="ml-1">Menú</h3>
+    <button @click="handleShowMinibar" class="btn-fab toggle-menu mr-3"><i :class="{'fas fa-times': showMinibar, 'fas fa-bars': !showMinibar}"></i></button>
+  </div>
+  <div class="minibar" v-show="showMinibar" :style="styles">
     <div class="header">
       <div class="brand"></div>
     </div>
     <div class="content">
       <ul class="main-menu">
-        <li :class="{ 'menu-item': true, 'active': activeItem === 'inicio' }">
+        <li :class="{ 'menu-item': true, 'active': activeItem === 'inicio' || activeItem === '' }">
           <a href="#inicio" class="menu-link" @click="updateUrl('inicio')">
             <i class="icon fas fa-home"></i>
             <span class="caption">Inicio</span>
@@ -36,7 +43,7 @@
           </a>
         </li>
         <li v-if="whatsapp" :class="{ 'menu-item': true, }">
-          <a rel="nofollow noopener noreferrer" :href="`https://wa.me/54${whatsapp}`" target="_blank" class="menu-link">
+          <a rel="nofollow noopener noreferrer" :href="`https://wa.me/54${whatsapp}`" target="_blank" class="menu-link" @click="handleShowMinibar()">
             <i class="icon fab fa-whatsapp"></i>
             <span class="caption">WhatsApp</span>
           </a>
@@ -53,30 +60,38 @@ export default {
   },
   data() {
     return {
-      currentURL: window.location.hash.substring(1)
+      currentURL: window.location.hash.substring(1),
+      showMinibar: true,
+      styles: {
+        display: 'block',
+      }
     }
+  },
+  mounted() {
+    if (window.innerWidth <= 600) {
+      this.showMinibar = false
+      this.styles.display = 'none'
+    } 
   },
   methods: {
     updateUrl(url) {
       this.currentURL = url;
+      this.handleShowMinibar()
+    },
+    handleShowMinibar() {
+      if (window.innerWidth <= 600) {
+        this.showMinibar = !this.showMinibar
+        this.styles.display = this.showMinibarStyle
+      }
     }
   },
   computed: {
     activeItem() {
-      if (this.currentURL === 'inicio' || this.currentURL === '') {
-        return 'inicio';
-      } else if (this.currentURL === 'perfil') {
-        return 'perfil';
-      } else if (this.currentURL === 'services') {
-        return 'services';
-      } else if (this.currentURL === 'portfolio') {
-        return 'portfolio';
-      } else if (this.currentURL === 'contact') {
-        return 'contact';
-      } else {
-        return '';
-      }
+      return this.currentURL;
     },
+    showMinibarStyle() {
+      return this.showMinibar ? 'block' : 'none';
+    }
   },
 };
 </script>

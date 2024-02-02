@@ -1,14 +1,15 @@
 ---
-import Minibar from '../../components/portfolio/Minibar.vue';
-import Inicio from '../../components/portfolio/Inicio.astro';
-import Perfil from '../../components/portfolio/Perfil.astro';
-import Conocimientos from '../../components/portfolio/Conocimientos.vue';
-import Experiencia from '../../components/portfolio/Experiencia.vue';
-import Servicios from '../../components/portfolio/Servicios.vue';
-import Portfolio from '../../components/portfolio/Portfolio.vue';
-import Contacto from '../../components/portfolio/Contacto.astro';
-import Footer from '../../components/portfolio/Footer.astro';
-import Actualizando from '../../components/portfolio/Actualizando.astro';
+import Minibar from '@/components/portfolio/Minibar.vue';
+import Inicio from '@/components/portfolio/Inicio.astro';
+import Perfil from '@/components/portfolio/Perfil.astro';
+import Conocimientos from '@/components/portfolio/Conocimientos.vue';
+import Experiencia from '@/components/portfolio/Experiencia.vue';
+import Servicios from '@/components/portfolio/Servicios.vue';
+import Portfolio from '@/components/portfolio/Portfolio.vue';
+import Contacto from '@/components/portfolio/Contacto.vue';
+import Footer from '@/components/portfolio/Footer.astro';
+import Actualizando from '@/components/portfolio/Actualizando.astro';
+import GoTop from '@/components/portfolio/GoTop.vue';
 
 interface Props {
   id: number;
@@ -38,7 +39,7 @@ interface Props {
 }
 import type { GetStaticPaths } from "astro";
 
-import Layout from '../../layouts/Portfolio.astro';
+import Layout from '@/layouts/Portfolio.astro';
 
 export const getStaticPaths = (async() => {
     const response = await fetch(
@@ -120,18 +121,7 @@ const servicios = await fetchServices.json();
   slug={slug}
   color={color}
 >
- <!-- Back to top button -->
- <div class="btn-back_to_top">
-    <i class="fas fa-chevron-up"></i>
-  </div>
-  
-  <div class="topbar-nav fixed-top">
-    <div class="brand">
-      <img src="../assets/images/faviconx64.png" alt="" width="30" height="30">
-    </div>
-    <h3 class="ml-1">Menú</h3>
-    <button class="btn-fab toggle-menu mr-3"><i class="fas fa-bars"></i></button>
-  </div>
+
   { activo && 
     <Minibar client:only
       whatsapp={whatsapp}
@@ -183,7 +173,9 @@ const servicios = await fetchServices.json();
         client:only
       />
       <Contacto 
+        client:only="vue"
         colorDarken={colorDarken}
+        myEmail={mail}
       />
   }
   { !activo && 
@@ -192,5 +184,6 @@ const servicios = await fetchServices.json();
 	<Footer 
     colorDark={colorDark}
   />
+  <GoTop client:only="vue" />
   </div> <!-- End main wrapper -->
 </Layout>

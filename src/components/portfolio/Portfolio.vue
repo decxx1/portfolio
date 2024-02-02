@@ -17,7 +17,7 @@
         <div class="gridder my-3" id="galleryID">
           <template v-for="value in portfolio">
             <div v-if="currentCategory === '*' || currentCategory === value.categoria" class="grid-item" :key="value.id">
-              <a class="img-place" :href="value.imagen" :data-pswp-width="getWidth(value.imagen)" :data-pswp-height="getHeight(value.imagen)" >
+              <a class="img-place" :href="value.imagen" :data-pswp-width="value.width" :data-pswp-height="value.height" >
                 <img loading="lazy" :src="value.mini" :alt="value.titulo">
               </a>
               <div class="img-caption portfolio-caption">
@@ -57,16 +57,6 @@ export default {
     methods: {
       setCategory(categoria){
         this.currentCategory = categoria;
-      },
-      getWidth(imageUrl) {
-        const img = new Image();
-        img.src = imageUrl;
-        return img.naturalWidth;
-      },
-      getHeight(imageUrl) {
-        const img = new Image();
-        img.src = imageUrl;
-        return img.naturalHeight;
       },
     },
     mounted() {

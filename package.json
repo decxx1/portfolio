@@ -12,8 +12,10 @@
   "dependencies": {
     "@astrojs/vue": "^4.0.8",
     "astro": "^4.2.6",
+    "axios": "^1.6.7",
     "photoswipe": "^5.4.3",
     "vue": "^3.4.15",
+    "vue-sonner": "^1.0.3",
     "wow.js": "^1.2.2"
   },
   "devDependencies": {
