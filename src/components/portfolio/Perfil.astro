@@ -34,8 +34,12 @@ const {
           <p class="fg-theme fw-medium">{titulo}</p>
           <p>{presentacion}</p>
           <ul class="theme-list">
-            <li class="fg-dark"><b>De:</b> {direccion}</li>
-            <li class="fg-dark"><b>Nacimiento:</b> {nacimiento}</li>
+            { direccion &&
+              <li class="fg-dark"><b>De:</b> {direccion}</li>
+            }
+            { nacimiento &&
+              <li class="fg-dark"><b>Nacimiento:</b> {nacimiento}</li>
+            }
             { whatsapp && 
               <li class="fg-dark"><b>Whatsapp:</b> {whatsapp}</li>
             }

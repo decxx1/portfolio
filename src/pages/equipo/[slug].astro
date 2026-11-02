@@ -10,180 +10,107 @@ import Contacto from '@/components/portfolio/Contacto.vue';
 import Footer from '@/components/portfolio/Footer.astro';
 import Actualizando from '@/components/portfolio/Actualizando.astro';
 import GoTop from '@/components/portfolio/GoTop.vue';
-
-interface Props {
-  id: number;
-  nombre: string;
-  color: string;
-  colorDark: string;
-  colorDarken: string;
-  titulo: string;
-  slug: string;
-  activo: boolean;
-  imagen: string;
-  presentacion: string;
-  direccion: string;
-  nacimiento: string;
-  mail: string;
-  conocimientos: object;
-  conocimientos_p: object;
-  educacion_a: object;
-  educacion_i: object;
-  educacion_t: object;
-  educacion_d: object;
-  experiencia_a: object;
-  experiencia_t: object;
-  experiencia_s: object;
-  experiencia_d: object;
-  whatsapp: string;
-}
-import type { GetStaticPaths } from "astro";
-
+import CmsAviso from '@/components/portfolio/CmsAviso.astro';
+import type { GetStaticPaths } from 'astro';
 import Layout from '@/layouts/Portfolio.astro';
+import { cmsUrl, leerEquipo, leerServicios, leerTrabajos } from '@/lib/cms';
+import type { MiembroVista } from '@/lib/cms-mapa';
 
-export const getStaticPaths = (async() => {
-    const response = await fetch(
-        "https://manejoweb.com.ar/api.php?get_equipo=1"
-      );
-      
-    const usuarios = await response.json();
+export const getStaticPaths = (async () => {
+  const equipo = await leerEquipo();
+  if (!equipo.ok) return [];
 
-    return usuarios.map((usuario) => {
-      return {
-        params: { slug: usuario.slug },
-        props: { 
-          id: usuario.id,
-          nombre: usuario.nombre,
-          color: usuario.color,
-          colorDark: usuario.dark,
-          colorDarken: usuario.darken,
-          whatsapp: usuario.whatsapp,
-          titulo: usuario.titulo,
-          activo: usuario.activo,
-          imagen: usuario.imagen,
-          presentacion: usuario.presentacion,
-          direccion: usuario.direccion,
-          nacimiento: usuario.nacimiento,
-          mail: usuario.mail,
-          conocimientos: usuario.conocimiento,
-          conocimientos_p: usuario.conocimiento_p,
-          educacion_a: usuario.educacion_a,
-          educacion_i: usuario.educacion_i,
-          educacion_t: usuario.educacion_t,
-          educacion_d: usuario.educacion_d,
-          experiencia_a: usuario.experiencia_a,
-          experiencia_t: usuario.experiencia_t,
-          experiencia_s: usuario.experiencia_s,
-          experiencia_d: usuario.experiencia_d,
-        },
-      };
-    });
-    
+  return equipo.miembros.map((miembro) => ({
+    params: { slug: miembro.slug },
+    props: { miembro },
+  }));
 }) satisfies GetStaticPaths;
 
-const { slug } = Astro.params
-const { 
-  id,
-  nombre,
-  color,
-  colorDark,
-  colorDarken,
-  titulo,
-  activo,
-  conocimientos,
-  conocimientos_p,
-  educacion_a,
-  educacion_i,
-  educacion_t,
-  educacion_d,
-  experiencia_a,
-  experiencia_t,
-  experiencia_s,
-  experiencia_d,
-  whatsapp,
-  imagen,
-  presentacion,
-  direccion,
-  nacimiento,
-  mail
-} = Astro.props
-const fetchCat = await fetch(`https://manejoweb.com.ar/api.php?get_categorias=${id}`);
-const categorias = await fetchCat.json();
-const fetchPortfolio = await fetch(`https://manejoweb.com.ar/api.php?get_portfolio=${id}`);
-const portfolio = await fetchPortfolio.json();
-const fetchServices = await fetch(`https://manejoweb.com.ar/api.php?get_servicios=${id}`);
-const servicios = await fetchServices.json();
+interface Props {
+  miembro: MiembroVista;
+}
+
+const { slug } = Astro.params;
+const { miembro } = Astro.props as Props;
+const trabajos = await leerTrabajos(miembro.id);
+const servicios = await leerServicios(miembro.id);
+const urlCms = cmsUrl();
+const tieneConocimientos = miembro.conocimientos.some((grupo) => grupo.length > 0);
 ---
 
-<Layout 
-  nombre={nombre}
-  titulo={titulo}
+<Layout
+  nombre={miembro.nombre}
+  titulo={miembro.titulo}
   slug={slug}
-  color={color}
+  color={miembro.color}
 >
-
-  { activo && 
-    <Minibar client:only
-      whatsapp={whatsapp}
-    />
-  }
+  {miembro.activo && (
+    <Minibar client:only whatsapp={miembro.whatsapp} />
+  )}
   <div class="vg-main-wrapper">
-  { activo && 
-      <Inicio 
-        nombre={nombre}
-        titulo={titulo}
-      />
-      <!-- Page Perfil -->
-      <div class="vg-page page-about" id="perfil">
-        <Perfil 
-          whatsapp={whatsapp}
-          imagen={imagen}
-          nombre={nombre}
-          titulo={titulo}
-          presentacion={presentacion}
-          direccion={direccion}
-          nacimiento={nacimiento}
-          mail={mail}
-        />
-        <Conocimientos 
-          conocimientos={conocimientos}
-          conocimientos_p={conocimientos_p}
-        />
-        <Experiencia 
-          educacion_a={educacion_a}
-          educacion_i={educacion_i}
-          educacion_t={educacion_t}
-          educacion_d={educacion_d}
-          experiencia_a={experiencia_a}
-          experiencia_t={experiencia_t}
-          experiencia_s={experiencia_s}
-          experiencia_d={experiencia_d}
-        />
-      </div> <!-- End page Perfil -->
-      { servicios &&
-        <Servicios
-          colorDark={colorDark}
-          colorDarken={colorDarken}
-          servicios={servicios}
-        />
-      }
-      <Portfolio 
-        categorias={categorias}
-        portfolio={portfolio}
-        client:only
-      />
-      <Contacto 
-        client:only="vue"
-        colorDarken={colorDarken}
-        myEmail={mail}
-      />
-  }
-  { !activo && 
-	  <Actualizando />
-  }
-	<Footer 
-    colorDark={colorDark}
-  />
-  <GoTop client:only="vue" />
-  </div> <!-- End main wrapper -->
+    {miembro.activo && (
+      <>
+        <Inicio nombre={miembro.nombre} titulo={miembro.titulo} />
+        <div class="vg-page page-about" id="perfil">
+          <Perfil
+            whatsapp={miembro.whatsapp}
+            imagen={miembro.imagen}
+            nombre={miembro.nombre}
+            titulo={miembro.titulo}
+            presentacion={miembro.presentacion}
+            direccion={miembro.direccion}
+            nacimiento={miembro.nacimiento}
+            mail={miembro.mail}
+          />
+          {tieneConocimientos && (
+            <Conocimientos
+              conocimientos={miembro.conocimientos}
+              conocimientos_p={miembro.conocimientos_p}
+            />
+          )}
+          {(miembro.educacion_t.length > 0 || miembro.experiencia_t.length > 0) && (
+            <Experiencia
+              educacion_a={miembro.educacion_a}
+              educacion_i={miembro.educacion_i}
+              educacion_t={miembro.educacion_t}
+              educacion_d={miembro.educacion_d}
+              experiencia_a={miembro.experiencia_a}
+              experiencia_t={miembro.experiencia_t}
+              experiencia_s={miembro.experiencia_s}
+              experiencia_d={miembro.experiencia_d}
+            />
+          )}
+        </div>
+        {servicios.ok && servicios.items.length > 0 && (
+          <Servicios
+            colorDark={miembro.colorDark}
+            colorDarken={miembro.colorDarken}
+            servicios={servicios.items}
+          />
+        )}
+        {!servicios.ok && (
+          <CmsAviso
+            titulo="No se pudieron leer los servicios"
+            detalle={`El CMS en ${urlCms} no respondió al pedir los servicios de este perfil. ${servicios.error}`}
+          />
+        )}
+        {trabajos.ok ? (
+          <Portfolio
+            categorias={trabajos.categorias}
+            portfolio={trabajos.items}
+            client:only
+          />
+        ) : (
+          <CmsAviso
+            titulo="No se pudieron leer los trabajos"
+            detalle={`El CMS en ${urlCms} no respondió al pedir los trabajos de este perfil. ${trabajos.error}`}
+          />
+        )}
+        <Contacto client:only="vue" colorDarken={miembro.colorDarken} myEmail={miembro.mail} />
+      </>
+    )}
+    {!miembro.activo && <Actualizando />}
+    <Footer colorDark={miembro.colorDark} />
+    <GoTop client:only="vue" />
+  </div>
 </Layout>

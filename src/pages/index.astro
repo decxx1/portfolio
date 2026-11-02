@@ -1,0 +1,38 @@
+---
+import CmsAviso from '@/components/portfolio/CmsAviso.astro'
+import Layout from '@/layouts/Portfolio.astro'
+import { cmsUrl, leerEquipo } from '@/lib/cms'
+
+const equipo = await leerEquipo()
+const url = cmsUrl()
+---
+
+<Layout nombre="ManejoWeb" titulo="Portfolio" slug="" color="#f55745">
+  <div class="vg-main-wrapper">
+    {
+      equipo.ok && equipo.miembros.length > 0 ? (
+        <div class="container py-5" data-cms-equipo>
+          <h1 class="fg-dark">Equipo</h1>
+          <ul class="theme-list mt-4">
+            {equipo.miembros.map((miembro) => (
+              <li>
+                <a href={`/equipo/${encodeURIComponent(miembro.slug)}`}>{miembro.nombre}</a>
+                {miembro.titulo ? ` — ${miembro.titulo}` : ''}
+              </li>
+            ))}
+          </ul>
+        </div>
+      ) : equipo.ok ? (
+        <CmsAviso
+          titulo="No hay miembros activos"
+          detalle={`El CMS en ${url} respondió, pero no hay fichas de equipo publicadas.`}
+        />
+      ) : (
+        <CmsAviso
+          titulo="No se pudo leer el CMS"
+          detalle={`El portfolio busca el contenido en ${url} y no obtuvo una respuesta útil. ${equipo.error} Levantá el CMS de ManejoWeb (por defecto el puerto 3000) y volvé a correr npm run dev o npm run build.`}
+        />
+      )
+    }
+  </div>
+</Layout>
