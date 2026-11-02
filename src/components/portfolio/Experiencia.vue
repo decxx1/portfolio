@@ -1,7 +1,7 @@
 <template>
  <div class="container pt-5">
     <div class="row">
-      <div class="col-md-6 wow fadeInRight" v-if="educacion_t">
+      <div class="col-md-6 wow fadeInRight" v-if="educacion_t && educacion_t.length">
         <h2 class="fg-dark">Educación</h2>
         <ul class="timeline mt-4 pr-md-5">
           <li v-for="(value, key) in educacion_t" :key="key">
@@ -15,7 +15,7 @@
         </ul>
       </div>
     
-      <div class="col-md-6 wow fadeInRight" data-wow-delay="200ms" v-if="experiencia_t">
+      <div class="col-md-6 wow fadeInRight" data-wow-delay="200ms" v-if="experiencia_t && experiencia_t.length">
         <h2 class="fg-dark">Experiencia</h2>
         <ul class="timeline mt-4 pr-md-5">
           <li v-for="(value, key) in experiencia_t" :key="key">
